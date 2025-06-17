@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Transparência - Secretaria de Educação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --cor-principal-verde: #28a745;
+            --cor-secundaria-azul: #007bff;
+            --cor-fundo-branco: #ffffff;
+            --cor-texto-preto: #333333;
+            --cor-detalhe-cinza: #f8f9fa;
+            --cor-borda-input: #ced4da;
+            --cor-sombra-input: rgba(0, 123, 255, 0.25);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--cor-detalhe-cinza);
+            color: var(--cor-texto-preto);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--cor-principal-verde) 0%, var(--cor-secundaria-azul) 100%);
+            color: var(--cor-fundo-branco);
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(25deg);
+            z-index: 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            font-weight: 600;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .admin-form-card {
+            background-color: var(--cor-fundo-branco);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            border-top: 6px solid var(--cor-principal-verde);
+        }
+
+        .admin-form-card h2 {
+            text-align: center;
+            color: var(--cor-secundaria-azul);
+            margin-bottom: 2rem;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            color: var(--cor-texto-preto);
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group select {
+            width: calc(100% - 20px); /* Ajuste para padding */
+            padding: 10px;
+            border: 1px solid var(--cor-borda-input);
+            border-radius: 8px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box; /* Garante que padding não aumente a largura */
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--cor-secundaria-azul);
+            box-shadow: 0 0 0 0.2rem var(--cor-sombra-input);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .icon-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .icon-selection label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px;
+            border: 2px solid var(--cor-borda-input);
+            border-radius: 8px;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+            width: 80px; /* Largura fixa para os ícones */
+            text-align: center;
+        }
+
+        .icon-selection input[type="radio"] {
+            display: none; /* Esconde o radio button original */
+        }
+
+        .icon-selection input[type="radio"]:checked + label {
+            background-color: var(--cor-principal-verde);
+            border-color: var(--cor-principal-verde);
+            color: var(--cor-fundo-branco);
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon-selection input[type="radio"]:checked + label .icon-preview {
+             color: var(--cor-fundo-branco); /* Ícone branco quando selecionado */
+        }
+
+
+        .icon-preview {
+            font-size: 2.2em;
+            margin-bottom: 0.5rem;
+            color: var(--cor-secundaria-azul);
+        }
+
+        .icon-selection label span {
+            font-size: 0.8em;
+            color: var(--cor-texto-preto);
+        }
+        .icon-selection input[type="radio"]:checked + label span {
+            color: var(--cor-fundo-branco); /* Texto branco quando selecionado */
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 2.5rem;
+        }
+
+        .form-actions button {
+            background-color: var(--cor-principal-verde);
+            color: var(--cor-fundo-branco);
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .form-actions button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background-color: var(--cor-texto-preto);
+            color: var(--cor-fundo-branco);
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            font-size: 0.9em;
+        }
+
+        /* Mensagens de feedback */
+        .feedback-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            display: none; /* Inicialmente oculto */
+        }
+
+        .feedback-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-tools"></i> Painel de Administração</h1>
+        <p>Secretaria de Educação</p>
+    </header>
+
+    <div class="container">
+        <div class="admin-form-card">
+            <h2>Adicionar Novo Documento</h2>
+            <form id="documentForm">
+                <div class="form-group">
+                    <label for="documentTitle">Título do Documento:</label>
+                    <input type="text" id="documentTitle" name="title" required placeholder="Ex: Relatório de Gestão 2024">
+                </div>
+
+                <div class="form-group">
+                    <label for="documentDescription">Descrição:</label>
+                    <textarea id="documentDescription" name="description" required placeholder="Breve descrição do conteúdo do documento..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="documentUrl">URL do Arquivo (PDF, etc.):</label>
+                    <input type="text" id="documentUrl" name="url" required placeholder="Ex: https://seuedominio.com.br/docs/relatorio2024.pdf">
+                    <small style="color: #6c757d; display: block; margin-top: 5px;">Certifique-se de que a URL seja acessível publicamente para pré-visualização.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Escolha um Ícone:</label>
+                    <div class="icon-selection">
+                        <input type="radio" id="iconFileInvoice" name="icon" value="fas fa-file-invoice" checked>
+                        <label for="iconFileInvoice">
+                            <i class="icon-preview fas fa-file-invoice"></i>
+                            <span>Relatório</span>
+                        </label>
+
+                        <input type="radio" id="iconChartLine" name="icon" value="fas fa-chart-line">
+                        <label for="iconChartLine">
+                            <i class="icon-preview fas fa-chart-line"></i>
+                            <span>Estatística</span>
+                        </label>
+
+                        <input type="radio" id="iconBook" name="icon" value="fas fa-book">
+                        <label for="iconBook">
+                            <i class="icon-preview fas fa-book"></i>
+                            <span>Livro/Edital</span>
+                        </label>
+
+                        <input type="radio" id="iconBuilding" name="icon" value="fas fa-building">
+                        <label for="iconBuilding">
+                            <i class="icon-preview fas fa-building"></i>
+                            <span>Infraestrutura</span>
+                        </label>
+
+                        <input type="radio" id="iconUsers" name="icon" value="fas fa-users">
+                        <label for="iconUsers">
+                            <i class="icon-preview fas fa-users"></i>
+                            <span>Pessoas</span>
+                        </label>
+
+                        <input type="radio" id="iconHandshake" name="icon" value="fas fa-handshake">
+                        <label for="iconHandshake">
+                            <i class="icon-preview fas fa-handshake"></i>
+                            <span>Convênio</span>
+                        </label>
+
+                        <input type="radio" id="iconDollarSign" name="icon" value="fas fa-dollar-sign">
+                        <label for="iconDollarSign">
+                            <i class="icon-preview fas fa-dollar-sign"></i>
+                            <span>Finanças</span>
+                        </label>
+
+                        <input type="radio" id="iconGavel" name="icon" value="fas fa-gavel">
+                        <label for="iconGavel">
+                            <i class="icon-preview fas fa-gavel"></i>
+                            <span>Jurídico</span>
+                        </label>
+
+                        </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit"><i class="fas fa-plus-circle"></i> Adicionar Documento</button>
+                </div>
+
+                <div id="feedback" class="feedback-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Secretaria de Educação. Painel de Administração.
+    </footer>
+
+    <script>
+        document.getElementById('documentForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+
+            const title = document.getElementById('documentTitle').value;
+            const description = document.getElementById('documentDescription').value;
+            const url = document.getElementById('documentUrl').value;
+            const selectedIcon = document.querySelector('input[name="icon"]:checked').value;
+            const feedbackDiv = document.getElementById('feedback');
+
+            // Aqui você faria uma requisição para o seu servidor (backend)
+            // para salvar esses dados em um banco de dados ou arquivo JSON.
+            // Por enquanto, vamos simular o envio.
+
+            console.log('Novo Documento Adicionado:');
+            console.log('Título:', title);
+            console.log('Descrição:', description);
+            console.log('URL:', url);
+            console.log('Ícone:', selectedIcon);
+
+            // Simulação de sucesso/erro
+            const isSuccess = Math.random() > 0.3; // 70% de chance de sucesso
+
+            if (isSuccess) {
+                feedbackDiv.textContent = 'Documento adicionado com sucesso! (Simulado)';
+                feedbackDiv.className = 'feedback-message success';
+                document.getElementById('documentForm').reset(); // Limpa o formulário
+            } else {
+                feedbackDiv.textContent = 'Erro ao adicionar o documento. Tente novamente. (Simulado)';
+                feedbackDiv.className = 'feedback-message error';
+            }
+            feedbackDiv.style.display = 'block';
+
+            // Oculta a mensagem de feedback após alguns segundos
+            setTimeout(() => {
+                feedbackDiv.style.display = 'none';
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
